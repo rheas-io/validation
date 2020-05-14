@@ -1,7 +1,7 @@
-import { Str } from "@laress/support";
-import { AnyObject } from "@laress/contracts";
-import { IRuleHandler } from "@laress/contracts/validators";
-import { EmailValidator } from "@laress/support/emailValidator";
+import { Str } from "@rheas/support";
+import { AnyObject } from "@rheas/contracts";
+import { IRuleHandler } from "@rheas/contracts/validators";
+import { EmailValidator } from "@rheas/support/emailValidator";
 
 export class RuleValidator {
 

@@ -1,10 +1,68 @@
-import { Rule } from "./rule";
-import { Str } from "@rheas/support";
-import { StringObject } from "@rheas/contracts";
-
-export class RuleError {
-
-    private static readonly default_messages: StringObject = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var rule_1 = require("./rule");
+var support_1 = require("@rheas/support");
+var RuleError = /** @class */ (function () {
+    function RuleError(rule) {
+        var params = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            params[_i - 1] = arguments[_i];
+        }
+        this.rule = rule;
+        this.params = params;
+    }
+    /**
+     * Parse the error message for this rule.
+     *
+     * @param field
+     * @param alias
+     * @param custom_messages
+     */
+    RuleError.prototype.getErrorMessage = function (field, alias, custom_messages) {
+        if (alias === void 0) { alias = ""; }
+        if (custom_messages === void 0) { custom_messages = {}; }
+        var error_message = "";
+        if (this.rule instanceof rule_1.Rule) {
+            // A rule can be given a name and custom messages can be 
+            // given for even these rules. Custom messages for custom
+            // Rule should have a key similar to "custom_rule_name".
+            // ie "custom_" + Str.snake(ruleName)
+            var rule_name = support_1.Str.snake('custom' + this.rule.getName());
+            error_message = custom_messages[rule_name] || this.rule.getErrorMessage();
+        }
+        // string rule should check the custom message or
+        // use the default message.
+        else {
+            error_message = custom_messages[this.rule] || RuleError.default_messages[this.rule];
+        }
+        error_message = this.replaceAttributePlaceholder(error_message, field, alias);
+        error_message = this.replaceParams(error_message);
+        return error_message;
+    };
+    /**
+     * Replaces the :attribute with the alias or field name
+     *
+     * @param field
+     * @param alias
+     */
+    RuleError.prototype.replaceAttributePlaceholder = function (message, field, alias) {
+        var attribute_name = null != alias && "" !== alias ? alias : field;
+        return message.replace(/:attribute/uig, attribute_name);
+    };
+    /**
+     * Replace the params in the message. Params are replaced in the
+     * order as they appear.
+     *
+     * @param message
+     */
+    RuleError.prototype.replaceParams = function (message) {
+        for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
+            var param = _a[_i];
+            message = message.replace(/(:\w+)/u, param);
+        }
+        return message;
+    };
+    RuleError.default_messages = {
         'accepted': 'The :attribute must be accepted.',
         'active_url': 'The :attribute is not a valid URL.',
         'after': 'The :attribute must be a date after :date.',
@@ -63,82 +121,7 @@ export class RuleError {
         'uploaded': 'The :attribute failed to upload.',
         'url': 'The :attribute format is invalid.',
         'uuid': 'The :attribute must be a valid UUID.',
-    }
-    /**
-     * The custom Rule object or string.
-     * 
-     * @var 
-     */
-    private rule: string | Rule;
-
-    /**
-     * The parameters submitted along with the rule.
-     * 
-     * @var array
-     */
-    private params: string[];
-
-    constructor(rule: string | Rule, ...params: string[]) {
-        this.rule = rule;
-        this.params = params;
-    }
-
-    /**
-     * Parse the error message for this rule.
-     * 
-     * @param field
-     * @param alias 
-     * @param custom_messages 
-     */
-    public getErrorMessage(field: string, alias: string = "", custom_messages: StringObject = {}): string {
-
-        let error_message = "";
-
-        if (this.rule instanceof Rule) {
-            // A rule can be given a name and custom messages can be 
-            // given for even these rules. Custom messages for custom
-            // Rule should have a key similar to "custom_rule_name".
-            // ie "custom_" + Str.snake(ruleName)
-            const rule_name = Str.snake('custom' + this.rule.getName());
-            error_message = custom_messages[rule_name] || this.rule.getErrorMessage();
-        }
-        // string rule should check the custom message or
-        // use the default message.
-        else {
-            error_message = custom_messages[this.rule] || RuleError.default_messages[this.rule];
-        }
-
-        error_message = this.replaceAttributePlaceholder(error_message, field, alias);
-
-        error_message = this.replaceParams(error_message);
-
-        return error_message;
-    }
-
-    /**
-     * Replaces the :attribute with the alias or field name
-     * 
-     * @param field 
-     * @param alias 
-     */
-    private replaceAttributePlaceholder(message: string, field: string, alias: string) {
-
-        let attribute_name = null != alias && "" !== alias ? alias : field;
-
-        return message.replace(/:attribute/uig, attribute_name);
-    }
-
-    /**
-     * Replace the params in the message. Params are replaced in the
-     * order as they appear.
-     * 
-     * @param message 
-     */
-    private replaceParams(message: string): string {
-
-        for (let param of this.params) {
-            message = message.replace(/(:\w+)/u, param)
-        }
-        return message;
-    }
-}
+    };
+    return RuleError;
+}());
+exports.RuleError = RuleError;

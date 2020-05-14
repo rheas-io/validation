@@ -2,8 +2,8 @@ import { Rule } from "./rule";
 import { RuleError } from "./ruleError";
 import { RuleParser } from "./ruleParser";
 import { RuleValidator } from "./ruleValidator";
-import { IValidator } from "@laress/contracts/validators";
-import { StringObject, AnyObject, KeyValue } from "@laress/contracts";
+import { IValidator } from "@rheas/contracts/validators";
+import { StringObject, AnyObject, KeyValue } from "@rheas/contracts";
 
 export class Validator implements IValidator {
 
@@ -100,7 +100,7 @@ export class Validator implements IValidator {
                 pass = rule.check(this.data, field);
             }
             // If the rule is not an instance of class Rule,
-            // it will be a string containing the basic Laress rules 
+            // it will be a string containing the basic Rheas rules 
             // and its arguments.
             else {
                 if ('bail' === rule.trim()) {

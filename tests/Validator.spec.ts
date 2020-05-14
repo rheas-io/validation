@@ -1,12 +1,12 @@
-import { Validator } from "../../src/validators";
+import { Validator } from "../src/validator";
 
 // A single field validation suit.
 describe("Validator test suites", () => {
 
-    // Test to see if an invalid rule submitted throws
-    // exception. Laress have a predefined rules defined, if the
-    // submitted rule does not match with any of these, then an 
-    // exception must be thrown.
+    // Test to see if an invalid rule submitted throws exception. 
+    // Rheas has a list of predefined set of rules, if the submitted 
+    // rule does not match with any of these, then an exception must 
+    // be thrown.
     it("Check unknown rule throws error", () => {
         let validator = new Validator({}, { test: "required|abcdefghi:10" });
 

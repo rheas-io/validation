@@ -1,5 +1,5 @@
 import { Rule } from "../src/Rule";
-import { AnyObject } from "@laress/contracts";
+import { AnyObject } from "@rheas/contracts";
 import { RuleParser } from "../src/ruleParser";
 
 // Test suite for checking the validation rule parser. Rules
