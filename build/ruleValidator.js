@@ -8,7 +8,6 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var support_1 = require("@rheas/support");
-var emailValidator_1 = require("@rheas/support/emailValidator");
 var RuleValidator = /** @class */ (function () {
     function RuleValidator(data) {
         this.data = data;
@@ -56,8 +55,7 @@ var RuleValidator = /** @class */ (function () {
      * @param field Data field name
      */
     RuleValidator.prototype.validateEmail = function (field) {
-        var validator = new emailValidator_1.EmailValidator();
-        return validator.validate(this.data[field]);
+        return support_1.Str.isValidEmail(this.data[field]);
     };
     /**
      * Check if the given input value has a min char length, array size

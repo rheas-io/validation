@@ -1,7 +1,6 @@
 import { Str } from "@rheas/support";
 import { AnyObject } from "@rheas/contracts";
 import { IRuleHandler } from "@rheas/contracts/validators";
-import { EmailValidator } from "@rheas/support/emailValidator";
 
 export class RuleValidator {
 
@@ -63,9 +62,7 @@ export class RuleValidator {
      */
     protected validateEmail(field: string) {
 
-        let validator = new EmailValidator();
-
-        return validator.validate(this.data[field]);
+        return Str.isValidEmail(this.data[field]);
     }
 
     /**
