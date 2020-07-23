@@ -1,16 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Rule_1 = require("./Rule");
-var RuleParser = /** @class */ (function () {
-    function RuleParser() {
-    }
+const Rule_1 = require("./Rule");
+class RuleParser {
     /**
      * Parse the given string of rules or array of rules
      * to a standard array format.
      *
      * @param rules Rule to be parsed.
      */
-    RuleParser.parse = function (rules) {
+    static parse(rules) {
         if (typeof rules === "string") {
             // Regex pattern used to split the string by the character |
             // Multiple | coming together are ignored from the string.
@@ -18,8 +16,8 @@ var RuleParser = /** @class */ (function () {
             rules = rules.split(/(?:\|)+/g);
         }
         // Filter out empty rules.
-        rules = rules.filter(function (value) { return value instanceof Rule_1.Rule || (value != null && value.trim().length > 0); });
-        rules = rules.map(function (rule) {
+        rules = rules.filter(value => value instanceof Rule_1.Rule || (value != null && value.trim().length > 0));
+        rules = rules.map(rule => {
             // If the rule is a string, parse it to check
             // for additional parameters.
             //
@@ -29,12 +27,11 @@ var RuleParser = /** @class */ (function () {
                 // Split the rule for characters ':' and ',' and trim
                 // each element. Multiple : and , occuring next to each other
                 // are ignored.
-                rule = rule.split(/(?::|,)+/g).map(function (value) { return value.trim(); });
+                rule = rule.split(/(?::|,)+/g).map(value => value.trim());
             }
             return Array.isArray(rule) ? rule : [rule];
         });
         return rules;
-    };
-    return RuleParser;
-}());
+    }
+}
 exports.RuleParser = RuleParser;

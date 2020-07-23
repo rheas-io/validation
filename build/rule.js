@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Rule = /** @class */ (function () {
-    function Rule(name) {
-        if (name === void 0) { name = ""; }
+class Rule {
+    constructor(name = "") {
         /**
          * Name of this rule.
          *
@@ -14,9 +13,8 @@ var Rule = /** @class */ (function () {
     /**
      * Returns the name of this rule.
      */
-    Rule.prototype.getName = function () {
+    getName() {
         return this.name;
-    };
-    return Rule;
-}());
+    }
+}
 exports.Rule = Rule;

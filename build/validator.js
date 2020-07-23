@@ -1,20 +1,11 @@
 "use strict";
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var rule_1 = require("./rule");
-var ruleError_1 = require("./ruleError");
-var ruleParser_1 = require("./ruleParser");
-var ruleValidator_1 = require("./ruleValidator");
-var Validator = /** @class */ (function () {
-    function Validator(data, rules, messages, aliases) {
-        if (messages === void 0) { messages = {}; }
-        if (aliases === void 0) { aliases = {}; }
+const rule_1 = require("./rule");
+const ruleError_1 = require("./ruleError");
+const ruleParser_1 = require("./ruleParser");
+const ruleValidator_1 = require("./ruleValidator");
+class Validator {
+    constructor(data, rules, messages = {}, aliases = {}) {
         /**
          * Holds the data to be validated.
          *
@@ -60,14 +51,14 @@ var Validator = /** @class */ (function () {
      *
      * @return boolean
      */
-    Validator.prototype.passes = function () {
+    passes() {
         this.errors = {};
-        for (var key in this.rules) {
+        for (let key in this.rules) {
             // Perform validation of all the rules
             this.fieldValidate(key, this.rules[key]);
         }
         return !this.hasErrors();
-    };
+    }
     /**
      * Check the field value against the validation rules. Rules
      * are given as a string or an array of string or Rule instance.
@@ -75,14 +66,13 @@ var Validator = /** @class */ (function () {
      * @param field Field to check
      * @param rules Rules to be checked
      */
-    Validator.prototype.fieldValidate = function (field, rules) {
-        var _a;
-        var rules_list = ruleParser_1.RuleParser.parse(rules);
-        var should_bail = false;
-        var bailed = false;
-        for (var i = 0; i < rules_list.length && !bailed; i++) {
-            var pass = false;
-            var _b = rules_list[i], rule = _b[0], params = _b.slice(1);
+    fieldValidate(field, rules) {
+        let rules_list = ruleParser_1.RuleParser.parse(rules);
+        let should_bail = false;
+        let bailed = false;
+        for (let i = 0; i < rules_list.length && !bailed; i++) {
+            let pass = false;
+            let [rule, ...params] = rules_list[i];
             if (rule instanceof rule_1.Rule) {
                 pass = rule.check(this.data, field);
             }
@@ -93,54 +83,53 @@ var Validator = /** @class */ (function () {
                 if ('bail' === rule.trim()) {
                     should_bail = true;
                 }
-                pass = (_a = this.ruleValidator).passesRule.apply(_a, __spreadArrays([rule, field], params));
+                pass = this.ruleValidator.passesRule(rule, field, ...params);
             }
             // If the rule validation failed, push the rule to
             // the error_rules array.
             if (!pass) {
-                this.pushError(field, new (ruleError_1.RuleError.bind.apply(ruleError_1.RuleError, __spreadArrays([void 0, rule], params)))());
+                this.pushError(field, new ruleError_1.RuleError(rule, ...params));
                 bailed = should_bail;
             }
         }
-    };
+    }
     /**
      * Pushes the validation rule error message
      *
      * @param field Field key
      * @param error Validation rule error
      */
-    Validator.prototype.pushError = function (field, error) {
+    pushError(field, error) {
         if (!Array.isArray(this.errors[field])) {
             this.errors[field] = [];
         }
-        var error_message = error.getErrorMessage(field, this.aliases[field], this.messages[field]);
+        let error_message = error.getErrorMessage(field, this.aliases[field], this.messages[field]);
         this.errors[field].push(error_message);
-    };
+    }
     /**
      * Determine if the validation failed or not.
      *
      * @return boolean
      */
-    Validator.prototype.fails = function () {
+    fails() {
         return !this.passes();
-    };
+    }
     /**
      * Returns the validation errors. Required for parsing
      * ValidationException response.
      *
      * @return object
      */
-    Validator.prototype.getErrors = function () {
+    getErrors() {
         return this.errors;
-    };
+    }
     /**
      * Checks for the presence of any validation errors.
      *
      * @return boolean
      */
-    Validator.prototype.hasErrors = function () {
+    hasErrors() {
         return this.errors && Object.keys(this.errors).length > 0;
-    };
-    return Validator;
-}());
+    }
+}
 exports.Validator = Validator;
