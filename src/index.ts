@@ -1,7 +1,4 @@
-import { Rule } from "./rule";
-import { Validator } from "./validator";
+import { Rule } from './rule';
+import { Validator } from './validator';
 
-export {
-    Rule,
-    Validator,
-};
+export { Rule, Validator };
