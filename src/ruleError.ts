@@ -1,5 +1,5 @@
 import { Rule } from './rule';
-import { Str } from '@rheas/support';
+import { Str } from '@rheas/support/str';
 import { StringObject } from '@rheas/contracts';
 
 export class RuleError {

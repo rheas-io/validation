@@ -12,16 +12,21 @@
     "server",
     "library"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "tsc": "tsc",
-    "test": "jest",
-    "coverage": "jest --coverage",
+    "test": "jest --verbose",
+    "coverage": "jest --verbose --coverage",
     "copypackage": "cp -rf package.json build",
     "build": "tsc && npm run copypackage",
     "copypackage_dev": "cp -rf package.json build_dev",
     "build-dev": "tsc --outDir ./build_dev && npm run copypackage_dev"
   },
   "devDependencies": {
+    "@rheas/contracts": "^0.0.1",
+    "@rheas/support": "^0.0.2",
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.2",
     "jest": "^25.4.0",
