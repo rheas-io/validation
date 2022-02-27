@@ -1,6 +1,6 @@
 {
   "name": "@rheas/validation",
-  "version": "0.0.3",
+  "version": "0.0.2",
   "description": "Rheas request validators and other core functionalities",
   "main": "index.js",
   "keywords": [
