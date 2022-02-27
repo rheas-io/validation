@@ -63,6 +63,18 @@ export class RuleValidator {
     }
 
     /**
+     * Check if the value is an integer number or not.
+     *
+     * @param field
+     * @returns
+     */
+    protected validateInteger(field: string) {
+        let value = this.data[field];
+
+        return Number.isInteger(value);
+    }
+
+    /**
      * Check if the given input value has a min char length, array size
      * or file size.
      *
@@ -109,6 +121,20 @@ export class RuleValidator {
     }
 
     /**
+     * Check if the value is a string or not.
+     *
+     * @param field
+     * @returns
+     */
+    protected validateString(field: string) {
+        let value = this.data[field];
+
+        return typeof value === 'string';
+    }
+
+    /**
+     * Size of input field is determined by the type of data. For arrays, we'll send
+     * the array length, for string, and for numbers, we return the number as it is.
      *
      * @param input
      */
@@ -116,10 +142,13 @@ export class RuleValidator {
         if (Array.isArray(input) || typeof input === 'string') {
             return input.length;
         }
-        return input.length;
+        return input;
     }
 
     /**
+     * Some of the rules requires additional parameters. This function checks whether enough
+     * parameters are provided for the rule. For example, min rule takes a single numeric
+     * value, which means the field under validation should be at least the given rule parameter.
      *
      * @param needs_count
      * @param rule
@@ -131,6 +160,8 @@ export class RuleValidator {
     }
 
     /**
+     * Some of the rules accepts only numbers as parameter. This function returns the numeic
+     * parameter or throws an exception.
      *
      * @param rule
      * @param value
